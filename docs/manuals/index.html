@@ -1,0 +1,18 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting...</title>
+  <meta http-equiv="refresh" content="0; url=./en/">
+  <script>
+    const lang = navigator.language || navigator.userLanguage;
+    const supported = ['en', 'pt', 'es', 'fr', 'de', 'it', 'zh', 'ja', 'ru', 'ar'];
+    const shortLang = lang.substring(0, 2).toLowerCase();
+    const target = supported.includes(shortLang) ? shortLang : 'en';
+    window.location.href = './' + target + '/';
+  </script>
+</head>
+<body>
+  <p>Redirecting to your language...</p>
+</body>
+</html>
