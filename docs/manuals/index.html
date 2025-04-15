@@ -1,18 +1,63 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Redirecting...</title>
-  <meta http-equiv="refresh" content="0; url=./en/">
-  <script>
-    const lang = navigator.language || navigator.userLanguage;
-    const supported = ['en', 'pt', 'es', 'fr', 'de', 'it', 'zh', 'ja', 'ru', 'ar'];
-    const shortLang = lang.substring(0, 2).toLowerCase();
-    const target = supported.includes(shortLang) ? shortLang : 'en';
-    window.location.href = './' + target + '/';
-  </script>
+  <meta charset="UTF-8">
+  <title>4All_OS — Manuais por Idioma</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f4f4;
+      margin-top: 50px;
+    }
+    h1 {
+      color: #1a73e8;
+    }
+    .flag-links {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    .flag {
+      text-align: center;
+      text-decoration: none;
+      color: #333;
+      font-size: 1.2em;
+    }
+    .flag img {
+      width: 64px;
+      height: 42px;
+      display: block;
+      margin: auto;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .flag:hover {
+      color: #1a73e8;
+    }
+  </style>
 </head>
 <body>
-  <p>Redirecting to your language...</p>
+
+  <h1>📘 Manuais do Projeto 4All_OS</h1>
+  <p>Escolha o idioma para visualizar o manual:</p>
+
+  <div class="flag-links">
+    <a class="flag" href="en/Manual_Colaborador_4All_OS_EN.html">
+      <img src="https://flagcdn.com/64x48/gb.png" alt="English">
+      English
+    </a>
+    <a class="flag" href="pt/Manual_Colaborador_4All_OS_PT.html">
+      <img src="https://flagcdn.com/64x48/br.png" alt="Português">
+      Português
+    </a>
+    <a class="flag" href="es/Manual_Colaborador_4All_OS_ES.html">
+      <img src="https://flagcdn.com/64x48/es.png" alt="Español">
+      Español
+    </a>
+  </div>
+
 </body>
 </html>
