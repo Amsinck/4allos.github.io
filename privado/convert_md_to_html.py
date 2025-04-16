@@ -11,7 +11,7 @@
 #   - Python 3.8+
 #
 # DEPEND√äNCIAS:
-#   pip install markdown
+#   pip install markdown google-cloud-translate
 #
 # MANTENEDOR:
 #   Funda√ß√£o 4All_OS - admin.4allos@proton.me
@@ -20,6 +20,7 @@
 import os
 import markdown
 import sys
+from google.cloud import translate_v2 as translate
 
 # ================================
 # CONFIGURA√á√ïES GLOBAIS
@@ -36,7 +37,7 @@ FOOTER_HTML = """
 """
 
 # Fun√ß√£o para envolver conte√∫do HTML num layout padr√£o
-def wrap_html(content, title):
+def wrap_html(content, title):`r`n    """DescriÁ„o da funÁ„o."""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,19 +91,25 @@ def wrap_html(content, title):
 </html>
 """
 
-# ================================
-# FUN√á√ÉO PRINCIPAL DE CONVERS√ÉO
-# ================================
+# Configura√ß√µes da API Google Translate
+translate_client = translate.Client()
 
-def convert_all_markdown_files():
+# Fun√ß√£o para traduzir texto usando Google Translate API
+def translate_text(text, target_language):`r`n    """DescriÁ„o da funÁ„o."""
+    result = translate_client.translate(text, target_lang=target_language)
+    return result['translatedText']
+
+# Fun√ß√£o para converter Markdown em HTML
+def convert_markdown_to_html(md_content, title):`r`n    """DescriÁ„o da funÁ„o."""
+    html_content = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
+    return wrap_html(html_content, title)
+
+# Fun√ß√£o para atualizar os manuais com tradu√ß√£o
+def convert_and_translate_manuals(lang_code="en"):`r`n    """DescriÁ„o da funÁ„o."""
     # Identifica pastas de idioma (en, pt, es, etc.)
-    lang_dirs = [
-        d for d in os.listdir()
-        if os.path.isdir(d) and not d.startswith('.') and d not in ['__pycache__']
-    ]
+    lang_dirs = [d for d in os.listdir() if os.path.isdir(d) and not d.startswith('.') and d not in ['__pycache__']]
 
     print("Pastas de idioma detectadas:", lang_dirs)
-    total_convertidos = 0
 
     for lang in lang_dirs:
         for file in os.listdir(lang):
@@ -114,28 +121,34 @@ def convert_all_markdown_files():
                     with open(md_path, "r", encoding="utf-8") as f:
                         md_content = f.read()
 
-                    html_content = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
-                    full_html = wrap_html(html_content, file.replace(".md", "").replace("_", " ").title())
+                    # Traduzir se n√£o for o idioma original
+                    if lang != lang_code:
+                        print(f"Traduzindo {file} para {lang_code}...")
+                        translated_content = translate_text(md_content, lang_code)
+                        html_content = convert_markdown_to_html(translated_content, file.replace(".md", "").replace("_", " ").title())
+                    else:
+                        html_content = convert_markdown_to_html(md_content, file.replace(".md", "").replace("_", " ").title())
 
                     with open(html_path, "w", encoding="utf-8") as f:
-                        f.write(full_html)
-
+                        f.write(html_content)
                     print(f"[OK] {md_path} ‚Üí {html_path}")
-                    total_convertidos += 1
 
                 except Exception as e:
                     # Fallback para evitar erro de terminal com unicode
                     print(f"[ERRO] Arquivo: {md_path}")
                     print(f"       Motivo: {str(e)}")
 
-    print(f"\nFinalizado. Total de arquivos convertidos: {total_convertidos}")
+    print(f"\nConvers√£o e Tradu√ß√£o conclu√≠das.")
 
+# Fun√ß√£o de entrada para o administrador escolher idioma
+def main():`r`n    """DescriÁ„o da funÁ„o."""
+    print("Bem-vindo ao sistema de atualiza√ß√£o de manuais do 4All_OS!")
+    print("Escolha o idioma para gerar os manuais (c√≥digo de idioma, ex: 'pt' para portugu√™s):")
+    lang_code = input("Digite o c√≥digo do idioma (ex: pt, es, fr, etc.): ").strip().lower()
 
-# ================================
-# PONTO DE ENTRADA DO SCRIPT
-# ================================
+    print(f"Iniciando o processo de convers√£o e tradu√ß√£o para {lang_code}...")
+    convert_and_translate_manuals(lang_code)
 
 if __name__ == "__main__":
-    print("4All_OS - Conversor de Markdown para HTML")
-    print("Iniciando processo...\n")
-    convert_all_markdown_files()
+    main()
+
